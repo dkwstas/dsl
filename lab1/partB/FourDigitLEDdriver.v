@@ -2,31 +2,28 @@ module FourDigitLEDdriver (
     input  clk,
     input  reset,
     output an3,
-    an2,
-    an1,
-    an0,
+    output an2,
+    output an1,
+    output an0,
     output a,
-    b,
-    c,
-    d,
-    e,
-    f,
-    g,
-    dp
+    output b,
+    output c,
+    output d,
+    output e,
+    output f,
+    output g,
+    output dp
 );
 
-  wire clk_fb_out, clk_fb, clk_slow_raw, clk_slow, locked;
+  wire clk_fb, clk_slow_raw, clk_slow, locked;
 
   MMCME2_BASE #(
-      .BANDWIDTH      ("OPTIMIZED"),
-      .CLKIN1_PERIOD  (10.0),         // 100 MHz
-      .DIVCLK_DIVIDE  (1),
-      .CLKFBOUT_MULT_F(6.0),          // VCO = 600 MHz
-      .CLKOUT1_DIVIDE (120),          // 600/120 = 5 MHz
-      .STARTUP_WAIT   ("FALSE")
+      .CLKIN1_PERIOD  (10.0),
+      .CLKFBOUT_MULT_F(6.0),
+      .CLKOUT1_DIVIDE (120)
   ) MMCME2_BASE_inst (
       .CLKIN1  (clk),
-      .CLKFBOUT(clk_fb_out),
+      .CLKFBOUT(clk_fb),
       .CLKFBIN (clk_fb),
       .CLKOUT1 (clk_slow_raw),
       .LOCKED  (locked),
@@ -34,10 +31,6 @@ module FourDigitLEDdriver (
       .RST     (reset)
   );
 
-  BUFG bufg_fb (
-      .I(clk_fb_out),
-      .O(clk_fb)
-  );
   BUFG bufg_slow (
       .I(clk_slow_raw),
       .O(clk_slow)
@@ -68,7 +61,8 @@ module FourDigitLEDdriver (
       4'b0000, 4'b1111, 4'b1110, 4'b1101: digit = 4'h0;
       4'b1100, 4'b1011, 4'b1010, 4'b1001: digit = 4'h1;
       4'b1000, 4'b0111, 4'b0110, 4'b0101: digit = 4'h2;
-      default: digit = 4'h3;
+      4'b0100, 4'b0011, 4'b0010, 4'b0001: digit = 4'h3;
+      default:                            digit = 4'h0;
     endcase
   end
 
@@ -79,13 +73,7 @@ module FourDigitLEDdriver (
   );
 
   assign {an3, an2, an1, an0} = an;
-  assign a = ~LED[6];
-  assign b = ~LED[5];
-  assign c = ~LED[4];
-  assign d = ~LED[3];
-  assign e = ~LED[2];
-  assign f = ~LED[1];
-  assign g = ~LED[0];
+  assign {a, b, c, d, e, f, g} = ~LED;
   assign dp = 1'b1;
 
 endmodule
