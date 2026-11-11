@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_driver_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_driver" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="436308087922fs"></ZoomEndTime>
+      <Cursor1Time time="708622429000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="100"></NameColumnWidth>
+      <ValueColumnWidth column_width="73"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="14" />
+   <wvobject fp_name="/tb_driver/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_driver/dut/locked" type="logic">
+      <obj_property name="ElementShortName">locked</obj_property>
+      <obj_property name="ObjectShortName">locked</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_driver/dut/tick" type="logic">
+      <obj_property name="ElementShortName">tick</obj_property>
+      <obj_property name="ObjectShortName">tick</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_driver/dut/state" type="array">
+      <obj_property name="ElementShortName">state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">state[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_driver/step_btn" type="logic">
+      <obj_property name="ElementShortName">step_btn</obj_property>
+      <obj_property name="ObjectShortName">step_btn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_driver/dut/step" type="logic">
+      <obj_property name="ElementShortName">step</obj_property>
+      <obj_property name="ObjectShortName">step</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_driver/dut/slot" type="logic">
+      <obj_property name="ElementShortName">slot</obj_property>
+      <obj_property name="ObjectShortName">slot</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_driver/dut/msg_pointer_inst/pending" type="logic">
+      <obj_property name="ElementShortName">pending</obj_property>
+      <obj_property name="ObjectShortName">pending</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_driver/dut/ptr" type="array">
+      <obj_property name="ElementShortName">ptr[3:0]</obj_property>
+      <obj_property name="ObjectShortName">ptr[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_driver/an3" type="logic">
+      <obj_property name="ElementShortName">an3</obj_property>
+      <obj_property name="ObjectShortName">an3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_driver/an2" type="logic">
+      <obj_property name="ElementShortName">an2</obj_property>
+      <obj_property name="ObjectShortName">an2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_driver/an1" type="logic">
+      <obj_property name="ElementShortName">an1</obj_property>
+      <obj_property name="ObjectShortName">an1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_driver/an0" type="logic">
+      <obj_property name="ElementShortName">an0</obj_property>
+      <obj_property name="ObjectShortName">an0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_driver/dut/char" type="array">
+      <obj_property name="ElementShortName">char[3:0]</obj_property>
+      <obj_property name="ObjectShortName">char[3:0]</obj_property>
+   </wvobject>
+</wave_config>

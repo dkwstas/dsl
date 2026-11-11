@@ -1,3 +1,11 @@
+//------------------------------------------------------------------------------
+// Module : LEDdecoder
+// Purpose: Combinational decoder from a hexadecimal digit to the 7 segments.
+// Ports  : char - input  [3:0] hexadecimal digit 0..F
+//          LED  - output [6:0] segments {a,b,c,d,e,f,g}, 1 = segment on
+// Notes  : The output is active-high. The cathodes of the board are
+//          active-low, so the polarity is inverted in segment_driver.
+//------------------------------------------------------------------------------
 module LEDdecoder (
     input  [3:0] char,
     output [6:0] LED

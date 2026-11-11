@@ -1,4 +1,18 @@
-module FourDigitLEDdriver (
+//------------------------------------------------------------------------------
+// Module : FourDigitLEDdriver (Part B)
+// Purpose: Top level. Scans the four 7-segment digits of the Boolean Board and
+//          shows the fixed message "0123".
+// Params : STEP_CYCLES - clk_slow cycles per scan step (500 -> 100 us). One
+//                        scan has 16 steps (1.6 ms), inside the 1-16 ms
+//                        refresh period of the seven-segment manual.
+// Ports  : clk   - 100 MHz board clock
+//          reset - btn[0], asynchronous, active high
+//          an3..an0 - digit anodes, active-low
+//          a..g, dp - segment cathodes, active-low
+//------------------------------------------------------------------------------
+module FourDigitLEDdriver #(
+    parameter STEP_CYCLES = 500
+) (
     input  clk,
     input  reset,
     output an3,
@@ -15,16 +29,26 @@ module FourDigitLEDdriver (
     output dp
 );
 
-  wire clk_fb, clk_slow_raw, clk_slow, locked;
+  wire       clk_fb;
+  wire       clk_slow_raw;
+  wire       clk_slow;
+  wire       locked;
+  wire       tick;
+  wire       slot;
+  wire [3:0] state;
+  wire [3:0] digit;
 
+  // 100 MHz -> 5 MHz: VCO = 100 MHz * 6 / 1 = 600 MHz, CLKOUT1 = 600 / 120.
+  // The internal feedback is connected directly to CLKFBOUT.
   MMCME2_BASE #(
       .CLKIN1_PERIOD  (10.0),
+      .DIVCLK_DIVIDE  (1),
       .CLKFBOUT_MULT_F(6.0),
       .CLKOUT1_DIVIDE (120)
   ) MMCME2_BASE_inst (
       .CLKIN1  (clk),
-      .CLKFBOUT(clk_fb),
       .CLKFBIN (clk_fb),
+      .CLKFBOUT(clk_fb),
       .CLKOUT1 (clk_slow_raw),
       .LOCKED  (locked),
       .PWRDWN  (1'b0),
@@ -36,44 +60,45 @@ module FourDigitLEDdriver (
       .O(clk_slow)
   );
 
-  wire rst_int = reset | ~locked;
-
-  reg [3:0] state;
-  always @(posedge clk_slow or posedge rst_int) begin
-    if (rst_int) state <= 4'b1111;
-    else state <= state - 1;  // one step per 200 ns
-  end
-
-  reg [3:0] an;
-  always @(*) begin
-    case (state)
-      4'b1110: an = 4'b0111;
-      4'b1010: an = 4'b1011;
-      4'b0110: an = 4'b1101;
-      4'b0010: an = 4'b1110;
-      default: an = 4'b1111;
-    endcase
-  end
-
-  reg [3:0] digit;
-  always @(*) begin
-    case (state)
-      4'b0000, 4'b1111, 4'b1110, 4'b1101: digit = 4'h0;
-      4'b1100, 4'b1011, 4'b1010, 4'b1001: digit = 4'h1;
-      4'b1000, 4'b0111, 4'b0110, 4'b0101: digit = 4'h2;
-      4'b0100, 4'b0011, 4'b0010, 4'b0001: digit = 4'h3;
-      default:                            digit = 4'h0;
-    endcase
-  end
-
-  wire [6:0] LED;
-  LEDdecoder LEDdecoder_inst (
-      .char(digit),
-      .LED (LED)
+  // LOCKED is used as clock enable of all sequential logic.
+  tick_gen #(
+      .N(STEP_CYCLES)
+  ) tick_gen_inst (
+      .clk  (clk_slow),
+      .reset(reset),
+      .en   (locked),
+      .tick (tick)
   );
 
-  assign {an3, an2, an1, an0} = an;
-  assign {a, b, c, d, e, f, g} = ~LED;
-  assign dp = 1'b1;
+  scan_fsm scan_fsm_inst (
+      .clk  (clk_slow),
+      .reset(reset),
+      .en   (locked),
+      .tick (tick),
+      .state(state),
+      .slot (slot)
+  );
+
+  anode_decoder anode_decoder_inst (
+      .state(state),
+      .an   ({an3, an2, an1, an0})
+  );
+
+  digit_sel digit_sel_inst (
+      .state(state),
+      .digit(digit)
+  );
+
+  segment_driver segment_driver_inst (
+      .char(digit),
+      .a   (a),
+      .b   (b),
+      .c   (c),
+      .d   (d),
+      .e   (e),
+      .f   (f),
+      .g   (g),
+      .dp  (dp)
+  );
 
 endmodule

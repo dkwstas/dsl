@@ -15,6 +15,16 @@ set_property -dict { PACKAGE_PIN D5 IOSTANDARD LVCMOS33 } [get_ports { an0 }];
 set_property -dict { PACKAGE_PIN C4 IOSTANDARD LVCMOS33 } [get_ports { an1 }];
 set_property -dict { PACKAGE_PIN C7 IOSTANDARD LVCMOS33 } [get_ports { an2 }];
 set_property -dict { PACKAGE_PIN A8 IOSTANDARD LVCMOS33 } [get_ports { an3 }];
-### Button(s)
+
+### Button btn[0]: asynchronous reset
 set_property -dict { PACKAGE_PIN J2 IOSTANDARD LVCMOS33 } [get_ports { reset }];
+
+### Button btn[1]: message step (Part C)
 set_property -dict { PACKAGE_PIN J5 IOSTANDARD LVCMOS33 } [get_ports { step_btn }];
+
+### Configuration voltage: the configuration bank is supplied at 3.3 V
+### (verify in the Boolean Board reference manual). CFGBVS tells the tool that
+### the bank voltage is given by VCCO, and CONFIG_VOLTAGE gives its value, so
+### the I/O standards can be checked against it.
+set_property CFGBVS VCCO [current_design];
+set_property CONFIG_VOLTAGE 3.3 [current_design];
